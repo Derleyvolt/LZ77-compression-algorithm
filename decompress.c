@@ -41,39 +41,12 @@ void insert(decompressed_bytes* arr, byte data) {
         free(arr->buf);
 
         // updating new capacity
-        arr->capacity = arr->capacity * 2;
-        arr->buf      = resized_buf;
+        arr->capacity      = arr->capacity * 2;
+        arr->buf           = resized_buf;
+		arr->buf[arr->len] = data;
     }
 
     arr->len++;
-}
-
-void write_binary(byte* buf, int len, const char* out);
-
-// len is a multiple of 4
-void decompress(byte* buf, int len, const char* out) {
-    decompressed_bytes arr;
-    arr = inicialize(len * 10);
-    tuple aux;
-    for(int i = 0; i < len; i += 4) {
-        memcpy(&aux, buf+i, sizeof(tuple));
-        if(aux.len > 100) {
-            printf("tamanho: %d\n", aux.len);
-        }
-        if(aux.backward == 0) {
-            insert(&arr, aux.symbol);
-        } else {
-            int ax = arr.len;
-            for(int i = 0; i < aux.len; i++) {
-                insert(&arr, arr.buf[ax-1-(aux.backward-1)+i]);
-            }
-
-            //if(!(i+4 >= len && aux.len > 0))
-            insert(&arr, aux.symbol);
-        }
-    }
-
-    write_binary(arr.buf, arr.len, out);
 }
 
 int read_binary(byte** buf, const char* in) {
@@ -81,7 +54,7 @@ int read_binary(byte** buf, const char* in) {
 
     if(fp == NULL) {
         printf("Erro na alocacao de memoria\n");
-        return -1;
+        exit(0);
     }
 
     fseek(fp, 0L, SEEK_END);
@@ -100,11 +73,34 @@ void write_binary(byte* buf, int len, const char* out) {
 
     if(fp == NULL) {
         printf("Erro na alocacao de memoria\n");
-        return;
+        exit(0);
     }
 
     fwrite(buf, len, 1, fp);
     fclose(fp);
+}
+
+// len is a multiple of 4
+void decompress(byte* buf, int len, const char* out) {
+    decompressed_bytes arr;
+    arr = inicialize(len * 10);
+    tuple aux;
+    for(int i = 0; i < len; i += 4) {
+        memcpy(&aux, buf+i, sizeof(tuple));
+        if(aux.len == 0) {
+            insert(&arr, aux.symbol);
+        } else {
+            int ax = arr.len;
+            for(int i = 0; i < aux.len; i++) {
+                insert(&arr, arr.buf[ax-1-(aux.backward-1)+i]);
+            }
+
+            if(i+4 < len && aux.len > 0)
+            	insert(&arr, aux.symbol);
+        }
+    }
+
+    write_binary(arr.buf, arr.len, out);
 }
 
 int main() {
