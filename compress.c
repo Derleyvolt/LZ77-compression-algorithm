@@ -138,7 +138,7 @@ int compression(byte buf[], int len, const char* out) {
     }
 
     write_binary(list, out);
-	free_list(list);
+    free_list(list);
     return list.len * sizeof(tuple);
 }
 
