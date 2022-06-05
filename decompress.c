@@ -16,6 +16,10 @@ typedef struct decompressed_bytes {
     int   len;
 } decompressed_bytes;
 
+void free_memory(decompressed_bytes arr) {
+    free(arr.buf);
+}
+
 decompressed_bytes inicialize(int capacity) {
     decompressed_bytes aux;
     aux.buf       = (byte*)malloc(sizeof(byte) * capacity);
@@ -100,6 +104,7 @@ void decompress(byte* buf, int len, const char* out) {
     }
 
     write_binary(arr.buf, arr.len, out);
+    free_memory(arr);
 }
 
 int main() {
