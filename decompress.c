@@ -82,7 +82,7 @@ void write_binary(byte* buf, int len, const char* out) {
 // len is a multiple of 4
 void decompress(byte* buf, int len, const char* out) {
     decompressed_bytes arr;
-    arr = inicialize(len * 10);
+    arr = inicialize(1024);
     tuple aux;
     for(int i = 0; i < len; i += 4) {
         memcpy(&aux, buf+i, sizeof(tuple));
