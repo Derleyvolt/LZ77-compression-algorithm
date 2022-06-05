@@ -110,7 +110,7 @@ int read_binary(byte** buf, const char* in) {
     return len;
 }
 
-void compression(byte buf[], int len, const char* out) {
+int compression(byte buf[], int len, const char* out) {
     dynamic_list list;
 
     list = inicialize(1024);
@@ -138,17 +138,21 @@ void compression(byte buf[], int len, const char* out) {
     }
 
     write_binary(list, out);
-	printf("%ld compressed bytes\n", sizeof(tuple) * list.len);
 	free_list(list);
+    return list.len * sizeof(tuple);
 }
 
 int main() {	
     byte* buf;
 
-    int n = read_binary(&buf, "vinho.csv");
+    int n = read_binary(&buf, "bls.csv");
 
 	printf("%d uncompressed bytes\n", n);
 
-    compression(buf, n, "saida.out");
+    int compressed_len = compression(buf, n, "saida.out");
+
+    double compressed_rate = 100 - (compressed_len/(double)n) * 100;
+
+    printf("%lf percent smaller\n", compressed_rate);
     return 0;
 }
