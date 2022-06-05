@@ -91,7 +91,7 @@ void decompress(byte* buf, int len, const char* out) {
         } else {
             int ax = arr.len;
             for(int i = 0; i < aux.len; i++) {
-                insert(&arr, arr.buf[ax-1-(aux.backward-1)+i]);
+                insert(&arr, arr.buf[ax-aux.backward+i]);
             }
 
             if(i+4 < len && aux.len > 0)
