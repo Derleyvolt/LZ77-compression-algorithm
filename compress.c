@@ -7,7 +7,7 @@
 typedef unsigned char byte;
 
 const int search_buf    = 1024;
-const int lookahead_buf = 100;
+const int lookahead_buf = 100; // limited to 255
 
 typedef struct tuple {
     unsigned short backward;
