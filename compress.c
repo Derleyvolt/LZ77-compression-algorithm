@@ -145,9 +145,9 @@ int compression(byte buf[], int len, const char* out) {
 int main() {	
     byte* buf;
 
-    int n = read_binary(&buf, "bls.csv");
+    int n = read_binary(&buf, "dataset.csv");
 
-	printf("%d uncompressed bytes\n", n);
+    printf("%d uncompressed bytes\n", n);
 
     int compressed_len = compression(buf, n, "saida.out");
 
